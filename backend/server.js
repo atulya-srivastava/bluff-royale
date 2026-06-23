@@ -311,6 +311,30 @@ io.on('connection', (socket) => {
       return;
     }
 
+    // Check for reconnection
+    const existingPlayer = room.players.find(p => p.username === username);
+    if (existingPlayer && existingPlayer.disconnected) {
+      // Reconnect player
+      existingPlayer.id = socket.id;
+      existingPlayer.disconnected = false;
+
+      socket.join(code);
+      socket.emit('room_joined', { roomCode: code, playerId: socket.id });
+      
+      // Resend their current cards
+      socket.emit('deal_cards', existingPlayer.cards);
+      
+      // Record reconnect event
+      room.gameState.history.push({
+        type: 'connect',
+        message: `${existingPlayer.username} reconnected.`,
+      });
+
+      io.to(code).emit('room_update', getCleanRoomState(room));
+      console.log(`Player ${existingPlayer.username} reconnected with new socket ${socket.id}`);
+      return;
+    }
+
     if (room.status !== 'lobby') {
       socket.emit('error_message', 'Game is already in progress.');
       return;

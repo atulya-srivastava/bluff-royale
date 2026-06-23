@@ -102,6 +102,16 @@ function ChatPanel({ roomState, roomCode, socket, playerId }) {
         itemClass = "bg-rose-950/20 border-rose-900/30 text-rose-200";
         title = "Expired";
         break;
+      case 'connect':
+        icon = <Gamepad2 className="w-3.5 h-3.5 text-emerald-450 mt-0.5 flex-shrink-0" />;
+        itemClass = "bg-emerald-950/20 border-emerald-900/30 text-emerald-200";
+        title = "Reconnected";
+        break;
+      case 'disconnect':
+        icon = <AlertTriangle className="w-3.5 h-3.5 text-rose-400 mt-0.5 flex-shrink-0" />;
+        itemClass = "bg-rose-950/20 border-rose-900/30 text-rose-200";
+        title = "Disconnected";
+        break;
       default:
         break;
     }

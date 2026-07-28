@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
+import Landing from './pages/Landing.jsx';
 import Lobby from './components/Lobby.jsx';
 import GameBoard from './components/GameBoard.jsx';
 import ChatPanel from './components/ChatPanel.jsx';
-import { ShieldAlert, RefreshCw, Volume2, VolumeX } from 'lucide-react';
+import { ShieldAlert, RefreshCw, Volume2, VolumeX, ArrowLeft } from 'lucide-react';
 
-// Premium Sound Synthesizer using Web Audio API
+// Sound Synthesizer using Web Audio API
 const soundPlayer = {
   ctx: null,
   muted: false,
@@ -137,6 +138,7 @@ const soundPlayer = {
 };
 
 function App() {
+  const [view, setView] = useState('landing'); // 'landing' | 'lobby'
   const [socket, setSocket] = useState(null);
   const [connected, setConnected] = useState(false);
   const [roomCode, setRoomCode] = useState('');
@@ -146,10 +148,8 @@ function App() {
   const [cards, setCards] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
   const [muted, setMuted] = useState(false);
-  
+
   useEffect(() => {
-    // Under Vite's proxy, '/socket.io' resolves to backend (localhost:5000)
-    // In production, connect to VITE_BACKEND_URL env variable or fallback to same origin
     const socketUrl = import.meta.env.VITE_BACKEND_URL || undefined;
     const socketInstance = io(socketUrl, {
       transports: ['websocket', 'polling'],
@@ -245,7 +245,6 @@ function App() {
     soundPlayer.muted = muted;
   }, [muted]);
 
-  // Accidental tab close / page reload protection
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       if (roomCode) {
@@ -259,6 +258,14 @@ function App() {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [roomCode]);
+
+  const handleStartGame = (presetUsername) => {
+    if (presetUsername) {
+      setUsername(presetUsername);
+    }
+    setView('lobby');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleCreateRoom = (name) => {
     if (!socket || !connected) return;
@@ -282,65 +289,68 @@ function App() {
     setRoomState(null);
     setCards([]);
     setErrorMsg('');
+    setView('landing');
   };
 
-  if (!connected && !roomCode) {
-    return (
-      <div className="min-h-screen flex flex-col justify-center items-center bg-[#0a0e17] px-4">
-        <div className="glass-panel-glow p-8 max-w-md w-full text-center flex flex-col items-center gap-4">
-          <RefreshCw className="animate-spin text-emerald-500 w-12 h-12" />
-          <h2 className="text-2xl font-bold tracking-tight text-white">Connecting to server...</h2>
-          <p className="text-slate-400 text-sm">Waiting for the card game server backend to establish contact.</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-[#0a0e17] text-slate-100 relative font-sans">
-      {/* Sound Control Banner (only on welcome screen) */}
-      {!roomCode && (
-        <header className="absolute top-4 right-4 flex justify-end items-center z-50">
-          <button
-            onClick={() => setMuted(!muted)}
-            className="p-2 bg-slate-800/80 hover:bg-slate-700 text-slate-200 rounded-full border border-slate-700/50 backdrop-blur-sm transition-all cursor-pointer"
-            title={muted ? 'Unmute game sounds' : 'Mute game sounds'}
-          >
-            {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-          </button>
-        </header>
-      )}
+    <div className="min-h-screen bg-[#1c1008] text-[#f5e6d3] relative font-sans">
+      
+      {/* Mute Control Banner */}
+      <header className="fixed top-4 right-4 flex justify-end items-center z-50">
+        <button
+          onClick={() => setMuted(!muted)}
+          className="p-2.5 bg-[#2d1a0e]/90 hover:bg-[#3b2314] text-[#d4af37] rounded-full border border-[#5c3b1e] backdrop-blur-md transition-all cursor-pointer shadow-lg"
+          title={muted ? 'Unmute game sounds' : 'Mute game sounds'}
+        >
+          {muted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+        </button>
+      </header>
 
       {/* Global Error Popups */}
       {errorMsg && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-2 bg-rose-950/90 border border-rose-500/50 text-rose-200 px-4 py-3 rounded-lg shadow-xl backdrop-blur-md max-w-sm animate-bounce">
-          <ShieldAlert className="w-5 h-5 text-rose-500 flex-shrink-0" />
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-2 bg-[#4a1212] border border-[#d4af37] text-[#f5e6d3] px-4 py-3 rounded-xl shadow-2xl backdrop-blur-md max-w-sm animate-bounce">
+          <ShieldAlert className="w-5 h-5 text-[#f59e0b] flex-shrink-0" />
           <span className="text-sm font-semibold">{errorMsg}</span>
         </div>
       )}
 
-      {/* Main Routing */}
-      {!roomCode ? (
-        <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden">
-          {/* Ambient glow */}
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+      {/* Main View Router */}
+      {view === 'landing' && !roomCode ? (
+        <Landing onStartGame={handleStartGame} />
+      ) : !roomCode ? (
+        /* Lobby Join/Host View */
+        <div className="min-h-screen bg-wood-pattern flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden">
           
-          <div className="glass-panel p-8 max-w-md w-full relative z-10 rounded-2xl border border-slate-800 shadow-2xl">
+          <button
+            onClick={() => setView('landing')}
+            className="absolute top-6 left-6 inline-flex items-center gap-2 text-xs font-bold text-[#dfc299] hover:text-[#d4af37] bg-[#2d1a0e]/80 border border-[#5c3b1e] px-4 py-2 rounded-full backdrop-blur-md transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" /> Back to Home Page
+          </button>
+
+          <div className="golden-card-panel p-8 max-w-md w-full relative z-10 rounded-2xl border-2 border-[#d4af37] shadow-2xl">
             <div className="text-center mb-8">
-              <span className="text-emerald-400 text-xs font-bold uppercase tracking-widest px-3 py-1 bg-emerald-950/40 rounded-full border border-emerald-500/20">WebSocket Multiplayer</span>
-              <h1 className="text-4xl font-extrabold mt-3 tracking-tight text-white">BLUFF <span className="text-emerald-500">ROYALE</span></h1>
-              <p className="text-slate-400 text-sm mt-2">The classic game of Cheat & cards. Spot the lie, empty your hand.</p>
+              <span className="text-[#d4af37] text-xs font-bold uppercase tracking-widest px-3 py-1 bg-[#3b2314] rounded-full border border-[#8c622b]">
+                Real-Time Card Table
+              </span>
+              <h1 className="font-heading text-4xl font-black mt-3 tracking-tight text-[#f5e6d3]">
+                BLUFF <span className="text-[#d4af37]">ROYALE</span>
+              </h1>
+              <p className="text-[#dfc299] text-sm mt-2 font-medium">
+                Enter your alias to host or join a live card room.
+              </p>
             </div>
             
             <Lobby 
               onCreateRoom={handleCreateRoom}
               onJoinRoom={handleJoinRoom}
               socket={socket}
+              defaultUsername={username}
             />
           </div>
         </div>
       ) : (
+        /* In-Room Game View */
         <div className="min-h-screen flex flex-col md:flex-row overflow-hidden relative">
           <ChatPanel 
             roomState={roomState}
@@ -350,9 +360,8 @@ function App() {
           />
           <div className="flex-grow min-h-screen overflow-hidden relative">
             {roomState && roomState.status === 'lobby' ? (
-              <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden">
-                <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-full max-w-lg h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
-                <div className="glass-panel p-8 max-w-lg w-full relative z-10 rounded-2xl border border-slate-800 shadow-2xl">
+              <div className="min-h-screen bg-wood-pattern flex items-center justify-center px-4 py-12 relative overflow-hidden">
+                <div className="golden-card-panel p-8 max-w-lg w-full relative z-10 rounded-2xl border-2 border-[#d4af37] shadow-2xl">
                   <Lobby 
                     roomState={roomState}
                     playerId={playerId}

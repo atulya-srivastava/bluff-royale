@@ -10,6 +10,13 @@
   h1, h2, h3, h4, .font-heading {
     font-family: 'Poppins', 'Inter', sans-serif;
   }
+
+  /* Snappy, immediate border transitions */
+  button, .border, [class*="border-"] {
+    transition-property: color, background-color, border-color, box-shadow, transform;
+    transition-duration: 100ms;
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
 }
 
 /* Color definitions and tokens for classic card table aesthetic */
@@ -31,17 +38,17 @@
   background-size: cover;
 }
 
-/* Classic Card Game Felt Table Texture */
+/* Classic Card Game Felt Table Texture (Dark Emerald Green Felt) */
 .bg-felt-dark {
-  background: radial-gradient(circle at center, #2e1a0f 0%, #150b05 100%);
-  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.85);
+  background: radial-gradient(circle at center, #0f3822 0%, #082415 50%, #03140b 100%);
+  box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.9);
 }
 
-/* Card Table Bezel Frame */
+/* Card Table Bezel Frame (Rich Wood Brown Rim) */
 .classic-table-bezel {
   border: 8px solid #3b2314;
   outline: 2px solid #5a371e;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.85);
 }
 
 /* Golden Card Panel Box */
@@ -50,6 +57,7 @@
   border: 2px solid #5c3b1e;
   border-top-color: #7d522a;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(212, 175, 55, 0.15);
+  transition: border-color 0.08s ease-out, box-shadow 0.1s ease-out;
 }
 
 .golden-card-panel:hover {
@@ -64,7 +72,7 @@
   font-weight: 700;
   border: 1px solid #fef08a;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  transition: all 0.2s ease-in-out;
+  transition: border-color 0.05s ease-out, transform 0.1s ease-out, box-shadow 0.1s ease-out, background 0.1s ease-out;
 }
 
 .btn-gold:hover {
@@ -82,7 +90,7 @@
   font-weight: 600;
   border: 1px solid #5c3a21;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-  transition: all 0.2s ease-in-out;
+  transition: border-color 0.05s ease-out, transform 0.1s ease-out, box-shadow 0.1s ease-out;
 }
 
 .btn-brown:hover {
@@ -92,14 +100,64 @@
   transform: translateY(-1px);
 }
 
-/* Card lift effect */
-.card-hover-lift {
-  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
+/* Classic Red Action Button style (Call Bluff) */
+.btn-red {
+  background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
+  color: #ffffff;
+  font-weight: 700;
+  border: 1px solid #fca5a5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: border-color 0.05s ease-out, transform 0.1s ease-out, box-shadow 0.1s ease-out, background 0.1s ease-out;
 }
 
-.card-hover-lift:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.6);
+.btn-red:hover {
+  background: linear-gradient(180deg, #b91c1c 0%, #7f1d1d 100%);
+  color: #fee2e2;
+  border-color: #ef4444;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Realistic Casino Playing Card Styling */
+.playing-card-real {
+  background: radial-gradient(circle at 40% 20%, #ffffff 0%, #faf6ee 65%, #f2ebdc 100%);
+  border-radius: 8px;
+  border: 1px solid #d4c5a9;
+  box-shadow: 
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.8),
+    inset 0 1px 3px rgba(255, 255, 255, 0.9);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease, border-color 0.1s ease;
+}
+
+.playing-card-real:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 
+    0 12px 28px rgba(0, 0, 0, 0.65),
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 1);
+  border-color: #d4af37;
+}
+
+.playing-card-selected {
+  background: radial-gradient(circle at 40% 20%, #ffffff 0%, #fffdfa 60%, #fef9c3 100%) !important;
+  border: 2px solid #d4af37 !important;
+  transform: translateY(-14px) scale(1.06) !important;
+  box-shadow: 
+    0 16px 36px rgba(0, 0, 0, 0.7),
+    0 0 16px rgba(212, 175, 55, 0.45),
+    inset 0 0 0 1px rgba(255, 255, 255, 1) !important;
+}
+
+/* Card Back Realistic Finish */
+.card-back-pattern {
+  background: 
+    radial-gradient(circle at 50% 50%, #4a1212 0%, #240808 100%),
+    repeating-linear-gradient(45deg, rgba(212, 175, 55, 0.15) 0, rgba(212, 175, 55, 0.15) 2px, transparent 0, transparent 8px);
+  border: 2px solid #d4af37;
+  border-radius: 8px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8), 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 /* Floating logo animation */
@@ -112,18 +170,95 @@
   }
 }
 
-.animate-float {
-  animation: floatLogo 5s ease-in-out infinite;
+/* Dynamic flying penalty card animation towards penalized player position */
+@keyframes flyToCandidate {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  }
+  60% {
+    opacity: 0.95;
+    transform: translate(calc(var(--tx) * 0.7), calc(var(--ty) * 0.7)) scale(0.85) rotate(calc(var(--rot) * 0.7));
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty)) scale(0.3) rotate(var(--rot));
+    opacity: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  }
 }
 
-::-webkit-scrollbar-track {
-  background: #1c1008;
+.animate-penalty-fly {
+  animation: flyToCandidate 1.1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
-::-webkit-scrollbar-thumb {
-  background: #3b2314;
-  border-radius: 4px;
-  border: 1px solid #5a371e;
+
+/* Clean iPhone Slide-to-Unlock: Left-to-Right twice -> Pause -> Repeat (No snapback) */
+@keyframes slideShimmer {
+  /* Sweep 1: 0% -> 30% */
+  0% { 
+    background-position: 200% 0; 
+    opacity: 1;
+  }
+  28% { 
+    background-position: -200% 0; 
+    opacity: 1;
+  }
+  /* Invisible instant jump back to left: 30% -> 34% */
+  30% { 
+    background-position: -200% 0; 
+    opacity: 0;
+  }
+  34% { 
+    background-position: 200% 0; 
+    opacity: 0;
+  }
+  /* Sweep 2: 36% -> 66% */
+  36% { 
+    background-position: 200% 0; 
+    opacity: 1;
+  }
+  64% { 
+    background-position: -200% 0; 
+    opacity: 1;
+  }
+  /* Pause phase: 66% -> 100% */
+  100% { 
+    background-position: -200% 0; 
+    opacity: 1;
+  }
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #d4af37;
+
+.iphone-shimmer-text {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.4) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: slideShimmer 7s linear infinite;
+}
+
+/* Hide scrollbars globally while maintaining full scrollability */
+::-webkit-scrollbar {
+  display: none;
+  width: 0px;
+  height: 0px;
+}
+
+* {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

@@ -76,7 +76,7 @@ const Landing = ({ onStartGame }) => {
         />
 
         {/* Below the fold: Feature Previews Section */}
-        <section className="py-16 bg-gradient-to-b from-transparent via-[#1c1008]/90 to-[#140904] border-t border-[#3b2314] relative">
+        <section className="py-16 bg-linear-to-b from-transparent via-[#1c1008]/90 to-[#140904] border-t border-[#3b2314] relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             {/* Section Header */}

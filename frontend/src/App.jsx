@@ -59,19 +59,20 @@ const soundPlayer = {
           break;
         }
         case 'challenge': {
+          // Soft subtle acoustic click instead of harsh buzzing synth
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(100, now);
-          osc.frequency.linearRampToValueAtTime(280, now + 0.25);
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(300, now);
+          osc.frequency.exponentialRampToValueAtTime(150, now + 0.1);
           
-          gain.gain.setValueAtTime(0.12, now);
-          gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+          gain.gain.setValueAtTime(0.03, now);
+          gain.gain.linearRampToValueAtTime(0.001, now + 0.1);
           
           osc.connect(gain);
           gain.connect(this.ctx.destination);
           osc.start(now);
-          osc.stop(now + 0.25);
+          osc.stop(now + 0.1);
           break;
         }
         case 'success': {
@@ -193,18 +194,7 @@ function App() {
     });
 
     socketInstance.on('game_state_update', (state) => {
-      const prevPhase = roomState?.gameState?.phase;
-      const newPhase = state?.gameState?.phase;
-      
       setRoomState(state);
-
-      if (prevPhase === 'play' && newPhase === 'challenge') {
-        soundPlayer.play('play');
-      } else if (newPhase === 'resolution') {
-        soundPlayer.play('challenge');
-      } else if (newPhase === 'play' && prevPhase === 'challenge') {
-        soundPlayer.play('success');
-      }
     });
 
     socketInstance.on('timer_tick', ({ timerLeft, phase }) => {
@@ -218,9 +208,6 @@ function App() {
           }
         };
       });
-      if (timerLeft <= 5 && timerLeft > 0) {
-        soundPlayer.play('timer');
-      }
     });
 
     socketInstance.on('game_reset', (state) => {
@@ -231,7 +218,6 @@ function App() {
     socketInstance.on('error_message', (msg) => {
       setErrorMsg(msg);
       setTimeout(() => setErrorMsg(''), 5000);
-      soundPlayer.play('fail');
     });
 
     setSocket(socketInstance);
@@ -294,22 +280,11 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#1c1008] text-[#f5e6d3] relative font-sans">
-      
-      {/* Mute Control Banner */}
-      <header className="fixed top-4 right-4 flex justify-end items-center z-50">
-        <button
-          onClick={() => setMuted(!muted)}
-          className="p-2.5 bg-[#2d1a0e]/90 hover:bg-[#3b2314] text-[#d4af37] rounded-full border border-[#5c3b1e] backdrop-blur-md transition-all cursor-pointer shadow-lg"
-          title={muted ? 'Unmute game sounds' : 'Mute game sounds'}
-        >
-          {muted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
-        </button>
-      </header>
 
       {/* Global Error Popups */}
       {errorMsg && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-2 bg-[#4a1212] border border-[#d4af37] text-[#f5e6d3] px-4 py-3 rounded-xl shadow-2xl backdrop-blur-md max-w-sm animate-bounce">
-          <ShieldAlert className="w-5 h-5 text-[#f59e0b] flex-shrink-0" />
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-9999 flex items-center gap-2 bg-[#4a1212] border border-[#d4af37] text-[#f5e6d3] px-4 py-3 rounded-xl shadow-2xl backdrop-blur-md max-w-sm animate-bounce">
+          <ShieldAlert className="w-5 h-5 text-[#f59e0b] shrink-0" />
           <span className="text-sm font-semibold">{errorMsg}</span>
         </div>
       )}
@@ -358,7 +333,7 @@ function App() {
             socket={socket}
             playerId={playerId}
           />
-          <div className="flex-grow min-h-screen overflow-hidden relative">
+          <div className="grow min-h-screen overflow-hidden relative">
             {roomState && roomState.status === 'lobby' ? (
               <div className="min-h-screen bg-wood-pattern flex items-center justify-center px-4 py-12 relative overflow-hidden">
                 <div className="golden-card-panel p-8 max-w-lg w-full relative z-10 rounded-2xl border-2 border-[#d4af37] shadow-2xl">

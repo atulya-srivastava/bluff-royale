@@ -17,7 +17,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-fadeIn">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-fadeIn">
       <div className="golden-card-panel max-w-md w-full rounded-2xl overflow-hidden border-2 border-[#d4af37] shadow-2xl relative">
         
         {/* Header */}

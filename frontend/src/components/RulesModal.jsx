@@ -6,7 +6,7 @@ const RulesModal = ({ isOpen, onClose, onPlayNow }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-fadeIn">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-fadeIn">
       <div className="golden-card-panel max-w-2xl w-full rounded-2xl overflow-hidden border-2 border-[#d4af37] shadow-2xl relative">
         
         {/* Header */}
@@ -74,7 +74,7 @@ const RulesModal = ({ isOpen, onClose, onPlayNow }) => {
           </div>
 
           <div className="bg-[#24140b] p-3.5 rounded-xl border border-[#8c622b] flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-[#f59e0b] flex-shrink-0 mt-0.5" />
+            <AlertTriangle className="w-5 h-5 text-[#f59e0b] shrink-0 mt-0.5" />
             <div className="text-xs text-[#dfc299]">
               <strong className="text-[#f5e6d3]">Pro Tip:</strong> Timing your challenges is key. Calling a bluff on a large pile high-stakes turn can win or cost you the match!
             </div>

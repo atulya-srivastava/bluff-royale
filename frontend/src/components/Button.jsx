@@ -39,7 +39,7 @@ const Button = ({
       className={`inline-flex items-center justify-center gap-2 rounded-full font-bold tracking-wide transition-all duration-200 cursor-pointer active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${sizeClasses[size] || sizeClasses.md} ${variantClasses[variant] || variantClasses.primary} ${className}`}
       {...props}
     >
-      {Icon && <Icon className="w-5 h-5 flex-shrink-0" />}
+      {Icon && <Icon className="w-5 h-5 shrink-0" />}
       <span>{children}</span>
     </button>
   );

@@ -12,11 +12,11 @@ const FeatureCard = ({ title, description, icon: Icon, badge, status, onClick })
       className="golden-card-panel rounded-2xl p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden transition-all duration-300 group cursor-pointer"
     >
       {/* Top subtle wood/gold accent stripe */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#5c3b1e] via-[#d4af37] to-[#5c3b1e]"></div>
+      <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-[#5c3b1e] via-[#d4af37] to-[#5c3b1e]"></div>
 
       <div>
         <div className="flex items-center justify-between mb-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-b from-[#3b2314] to-[#1c1008] border border-[#d4af37] flex items-center justify-center text-[#d4af37] shadow-inner group-hover:scale-105 transition-transform">
+          <div className="w-12 h-12 rounded-xl bg-linear-to-b from-[#3b2314] to-[#1c1008] border border-[#d4af37] flex items-center justify-center text-[#d4af37] shadow-inner group-hover:scale-105 transition-transform">
             {Icon ? <Icon className="w-6 h-6" /> : <Sparkles className="w-6 h-6" />}
           </div>
 

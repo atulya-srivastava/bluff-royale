@@ -16,9 +16,13 @@
 
 ## Screenshots
 
-| Landing Page Hero | Real-Time Card Table |
-| :---: | :---: |
-| ![Hero Preview Placeholder](./frontend/src/assets/hero_cards.png) | ![Wood Texture Accent](./frontend/src/assets/wood_bg.png) |
+| Landing Page Hero |
+| :---: |
+| <img width="1915" height="942" alt="image" src="https://github.com/user-attachments/assets/2933554a-3823-4619-9f67-1eaf1f551fa0" /> |
+
+| Real-Time Card Table |
+| :---: |
+| <img width="1915" height="942" alt="image" src="https://github.com/user-attachments/assets/aef04c2d-ce83-4add-9562-1fd0819ef45a" />|
 
 ---
 
